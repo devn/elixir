@@ -50,6 +50,10 @@ defmodule IEx.OptionsTest do
     assert "1\n2\n3\n4\n2\n** (RuntimeError) Out of bounds" <> _ = capture_iex("1\n2\n3\n4\nv(2)\nv(2)", opts)
   end
 
+  test "persisting history" do
+    opts = [persist_history: true]
+  end
+
   test "bad option" do
     assert_raise ArgumentError, fn ->
       IEx.Options.set :nonexistent_option, nil

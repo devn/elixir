@@ -4,6 +4,8 @@ defmodule IEx.History do
   def init do
     Process.put(:iex_history_start_counter, 1)
     Process.put(:iex_history_counter, 1)
+    Process.put(:iex_history_persist, true)
+    Process.put(:iex_history_file, "~/.iex_history")
   end
 
   ### append ###
@@ -125,5 +127,17 @@ defmodule IEx.History do
       raise "Out of bounds"
     end
     entry
+  end
+
+  ### persist_history? ###
+
+  def persist_history? do
+    IEx.Options.get(:persist_history)
+  end
+
+  ### persist_history! ###
+
+  def persist_history!(code, file) do
+    File.write(file, code, [:append])
   end
 end

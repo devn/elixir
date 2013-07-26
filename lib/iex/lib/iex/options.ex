@@ -33,7 +33,7 @@ defmodule IEx.Options do
 
   """
 
-  @supported_options %w(colors inspect history_size)a
+  @supported_options %w(colors inspect history_size persist_history)a
 
   @doc """
   Returns all supported IEx options with their respective values as a keyword
@@ -53,7 +53,8 @@ defmodule IEx.Options do
 
   keys = [ colors: :colors,
            inspect: :inspect_opts,
-           history_size: :history_size ]
+           history_size: :history_size,
+           persist_history: :persist_history ]
 
   Enum.each keys, fn { key, env } ->
     def get(unquote(key)) do
@@ -114,6 +115,16 @@ defmodule IEx.Options do
     raise_value("an integer")
   end
 
+  def set(:persist_history, opt) when is_boolean(opt) do
+    old_value = get(:persist_history)
+    :application.set_env(:iex, :persist_history, opt)
+    old_value
+  end
+
+  def set(:persist_history, _) do
+    raise_value("a boolean")
+  end
+
   def set(name, _) do
     raise_option(name)
   end
@@ -132,6 +143,25 @@ defmodule IEx.Options do
     * info        -- color for various informational messages
     * directory   -- color for directory entries (ls helper)
     * device      -- color for device entries (ls helper)
+  """
+
+  def persist_history
+  @doc """
+  **NOTE**: This is just a stub for documentation purposes. Use
+  `IEx.Options.get` and `IEx.Options.set` to query and change the option's
+  value. You may also choose to set this in your .iex file.
+
+  Persist history when exiting an iex session to have access to it in a
+  future session.
+
+  The value is a boolean.
+  """
+
+  def colors
+  @doc """
+  **NOTE**: This is just a stub for documentation purposes. Use
+  `IEx.Options.get` and `IEx.Options.set` to query and change the option's
+  value.
   """
 
   def help(:inspect), do: """

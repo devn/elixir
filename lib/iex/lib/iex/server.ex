@@ -165,6 +165,7 @@ defmodule IEx.Server do
 
   defp update_history(config) do
     IEx.History.append(config, config.counter)
+    IEx.History.persist_history!(config.cache, "/Users/dmw/iex_history_test")
   end
 
   defp input_loop(iex_pid) do
